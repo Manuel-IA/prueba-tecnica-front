@@ -65,75 +65,66 @@
           </template> -->
 
           <template v-slot:item="props">
-            <div :class="cardClasses" :style="props.selected ? 'transform: scale(0.90);' : ''" >
-              <q-card bordered v-ripple class="cursor-pointer q-hoverable" square >
-                <span class="q-focus-helper"></span>
+            <div v-if="true" :class="cardClasses" :style="props.selected ? 'transform: scale(0.90);' : ''" >
+              <q-card style="min-height: 500px;" class="my-card">
+                <q-img :src="props.row.thumbnail" style="max-height: 200px;" />
+
+                <q-dialog v-model="showImage">
+                  <q-card>
+                    <q-card-section class="row items-center q-pb-none">
+                      <div class="text-h6">Close Image</div>
+                      <q-space />
+                      <q-btn icon="close" flat round dense v-close-popup />
+                    </q-card-section>
+
+                    <q-card-section>
+                      <q-img :src="props.row.thumbnail" />
+                    </q-card-section>
+                  </q-card>
+                </q-dialog>
+
                 <q-card-section>
-                  <q-card-section :class="cellStyles">
-                    <b>Title</b><br/>
-                    {{props.row.title}}
-                  </q-card-section>
+                  <div class="row no-wrap items-center">
+                    <div class="col text-h6">
+                      {{props.row.title}}
+                    </div>
+                  </div>
 
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Price</b><br/>
-                    {{props.row.price}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Brand</b><br/>
-                    {{props.row.brand}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Category</b><br/>
-                    {{props.row.category}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Description</b><br/>
-                    {{props.row.description}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Discount Percentage</b><br/>
-                    {{props.row.discountPercentage}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>ID</b><br/>
-                    {{props.row.id}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Rating</b><br/>
-                    {{props.row.rating}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Stock</b><br/>
-                    {{props.row.stock}}
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Thumbnail</b><br/>
-                    <q-img :src="props.row.thumbnail" />
-                  </q-card-section>
-
-                  <q-separator />
-                  <q-card-section :class="cellStyles">
-                    <b>Images</b><br/>
-                    <ImagesViewer :images="props.row.images" />
-                  </q-card-section>
+                  <q-rating readonly v-model="props.row.rating" :max="5" size="16px" color="red" />
                 </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
+                    {{props.row.brand}}
+                  </div>
+
+                  <div class="text-subtitle1">
+                    ${{props.row.price}}・{{props.row.category}}
+                  </div>
+
+                  <div class="text-subtitle2">
+                    Stock: {{props.row.stock}}
+                  </div>
+                  <q-separator />
+
+                  <div class="text-caption text-grey q-py-sm">
+                    <span class="ellipsis-3-lines" >
+                      {{props.row.description}}
+                    </span>
+                  </div>
+                </q-card-section>
+
+                <q-card-actions>
+                  <q-btn
+                    flat
+                    class="q-mx-auto"
+                    color="primary"
+                    icon="zoom_in"
+                  >
+                    Show Details
+                    {{props.row.id}}
+                  </q-btn>
+                </q-card-actions>
               </q-card>
             </div>
           </template>
@@ -146,11 +137,9 @@
 <script>
 import { Loading } from 'quasar'
 import { defineComponent } from 'vue'
-import ImagesViewer from 'src/components/ImagesViewer.vue'
 
 export default {
   components: {
-    ImagesViewer
   },
   setup () {
     const columns = [
@@ -188,7 +177,8 @@ export default {
       },
       minOption: null,
       maxOption: null,
-      rows: []
+      rows: [],
+      showImage: false
     }
   },
   mounted () {
@@ -212,7 +202,7 @@ export default {
       return 'col-xs-4 col-sm-5 col-md-3 q-ma-none q-py-md'
     },
     cardClasses () {
-      return 'q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-4 grid-style-transition'
+      return 'q-pa-md col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition'
     }
   },
   methods: {
@@ -243,9 +233,9 @@ export default {
 
       let newArr = [].concat(rows) // Copy original array
 
-      console.log( wordToSearch )
-      console.log( min )
-      console.log( max )
+      // console.log( wordToSearch )
+      // console.log( min )
+      // console.log( max )
 
       // Range Filter
       if ( min && max ) {
