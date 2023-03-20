@@ -1,17 +1,17 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+    <h2 class="">Products</h2>
+
+    <List />
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import List from 'src/components/products/List.vue'
 
-export default defineComponent({
-  name: 'IndexPage'
-})
+export default {
+  components: {
+    List
+  }
+}
 </script>
