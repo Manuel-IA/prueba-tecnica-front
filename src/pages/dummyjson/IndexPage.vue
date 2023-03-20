@@ -69,20 +69,6 @@
               <q-card style="min-height: 500px;" class="my-card">
                 <q-img :src="props.row.thumbnail" style="max-height: 200px;" />
 
-                <q-dialog v-model="showImage">
-                  <q-card>
-                    <q-card-section class="row items-center q-pb-none">
-                      <div class="text-h6">Close Image</div>
-                      <q-space />
-                      <q-btn icon="close" flat round dense v-close-popup />
-                    </q-card-section>
-
-                    <q-card-section>
-                      <q-img :src="props.row.thumbnail" />
-                    </q-card-section>
-                  </q-card>
-                </q-dialog>
-
                 <q-card-section>
                   <div class="row no-wrap items-center">
                     <div class="col text-h6">
@@ -91,6 +77,7 @@
                   </div>
 
                   <q-rating readonly v-model="props.row.rating" :max="5" size="16px" color="red" />
+                  <span class="text-caption text-grey q-px-sm">({{props.row.rating}})</span>
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
@@ -102,8 +89,8 @@
                     ${{props.row.price}}・{{props.row.category}}
                   </div>
 
-                  <div class="text-subtitle2">
-                    Stock: {{props.row.stock}}
+                  <div class="text-subtitle2 q-pb-md">
+                    Stock: <q-badge class="q-px-sm" :color="(props.row.stock > 0) ? 'green' : 'red'">{{props.row.stock}}</q-badge>
                   </div>
                   <q-separator />
 
@@ -120,15 +107,20 @@
                     class="q-mx-auto"
                     color="primary"
                     icon="zoom_in"
+                    @click="onShow( props.row )"
                   >
                     Show Details
-                    {{props.row.id}}
                   </q-btn>
                 </q-card-actions>
               </q-card>
             </div>
           </template>
         </q-table>
+
+        <!-- Dialog -->
+        <q-dialog v-model="showInfo">
+          <ShowProduct :productInfo="productToShow"/>
+        </q-dialog>
       </div>
     </q-card>
   </q-page>
@@ -137,9 +129,11 @@
 <script>
 import { Loading } from 'quasar'
 import { defineComponent } from 'vue'
+import ShowProduct from 'src/components/ShowProduct.vue'
 
 export default {
   components: {
+    ShowProduct
   },
   setup () {
     const columns = [
@@ -162,23 +156,28 @@ export default {
     }
   },
   data () {
+    const tablePagination = {
+      rowsPerPage: 10,
+      rowsPerPageOptions: [ 5, 10, 15, 20 ]
+    }
+    const filterOptions = {
+      options: [ 'A-Z', 'Z-A', '1-100', '100-1' ],
+      orderBy: null,
+      wordToSearch: null,
+      majorToMinor: false,
+      min: null,
+      max: null
+    }
+
     return {
-      tablePagination: {
-        rowsPerPage: 10,
-        rowsPerPageOptions: [ 5, 10, 15, 20 ]
-      },
-      filterOptions: {
-        options: [ 'A-Z', 'Z-A', '1-100', '100-1' ],
-        orderBy: null,
-        wordToSearch: null,
-        majorToMinor: false,
-        min: null,
-        max: null
-      },
+      tablePagination,
+      filterOptions,
       minOption: null,
       maxOption: null,
       rows: [],
-      showImage: false
+      showInfo: false,
+      productToShow: {}
+
     }
   },
   mounted () {
@@ -285,7 +284,7 @@ export default {
         } )
       }
 
-      // Numeric
+      // Numbers
       if ( mode.includes( '1' ) ) {
         newArr.sort( ( product1, product2 ) => {
           let validation = ( mode == '1-100' ) ? (product1.price - product2.price) : (product2.price - product1.price)
@@ -295,6 +294,10 @@ export default {
       }
 
       return( newArr )
+    },
+    onShow ( productInfo ) {
+      this.productToShow = productInfo
+      this.showInfo = true
     }
   }
 }
