@@ -62,7 +62,9 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API: 'https://dragon.virtualshop.c66.me/v1'
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

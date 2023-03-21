@@ -148,7 +148,7 @@ export default {
 
     return {
       columns,
-      url: 'https://dragon.virtualshop.c66.me/v1/products'
+      url: '/products'
     }
   },
   data () {
@@ -178,7 +178,7 @@ export default {
   },
   mounted () {
     Loading.show()
-    this.$axios.get( this.url )
+    this.$api.get( this.url )
       .then( ( response ) => {
         let products = response.data
 
