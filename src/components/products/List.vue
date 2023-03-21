@@ -1,6 +1,6 @@
 <template>
   <q-card class="full-width" >
-    <div class="q-pa-md">
+    <div class="q-px-md q-pb-md q-pt-sm">
       <q-table
         title="Products"
         :rows="rows"
@@ -13,53 +13,41 @@
         :filter="filterOptions"
         :filter-method="myFilterMethod"
       >
-        <!-- FILTERS -->
-        <template v-slot:top-left="props">
-          <div class="full-width q-pa-sm">
-            Filters
-          </div>
-
-          <!-- Range -->
-          <q-input class="q-px-sm" style="width: 20%" type="number" label="Min price" v-model="minOption" />
-          <q-input class="q-px-sm" style="width: 20%" type="number" label="Max price" v-model="maxOption" />
-
-          <!-- Order by -->
-          <q-select
-            class="q-px-sm"
-            label="Order by"
-            style="width: 25%;"
-            v-model="filterOptions.orderBy"
-            :options="filterOptions.options"
-          />
-
-          <!-- buttons -->
-          <div class="full-width q-py-sm">
-            <q-btn label="Apply" @click="applyFilters" />
-            <q-btn label="Reset" @click="resetFilters" />
-          </div>
-        </template>
 
         <!-- Search Input -->
-        <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filterOptions.wordToSearch" placeholder="Search">
+        <template v-slot:top-left="props">
+          <q-input borderless dense debounce="300" v-model="filterOptions.wordToSearch" placeholder="Search" class="q-mt-sm q-mb-md">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
         </template>
 
-        <!-- <template v-slot:top-right="props">
-          records per page:
-          <q-select
-            borderless v-model="tablePagination.rowsPerPage"
-            :options="tablePagination.rowsPerPageOptions"
-          />
+        <!-- FILTERS -->
+        <template v-slot:top-right="props">
+          <div class="flex justify-end">
+            <div class="row">
+              <!-- Range -->
+              <q-input class="q-px-sm" style="width: 30%" type="number" label="Min price" v-model="minOption" />
+              <q-input class="q-px-sm" style="width: 30%" type="number" label="Max price" v-model="maxOption" />
 
-          on page: {{tablePagination.page}}
+              <!-- Order by -->
+              <q-select
+                class="q-px-sm"
+                style="width: 35%;"
+                label="Order by"
+                v-model="filterOptions.orderBy"
+                :options="filterOptions.options"
+              />
+            </div>
 
-          <q-btn flat icon="chevron_left" @click="props.prevPage" />
-          <q-btn flat icon="chevron_right" @click="props.nextPage" />
-        </template> -->
+            <!-- buttons -->
+            <div class="full-width q-py-sm text-right">
+              <q-btn label="Apply" @click="applyFilters" />
+              <q-btn label="Reset" @click="resetFilters" />
+            </div>
+          </div>
+        </template>
 
         <template v-slot:item="props">
           <div v-if="true" :class="cardClasses" :style="props.selected ? 'transform: scale(0.90);' : ''" >
@@ -153,7 +141,7 @@ export default {
   },
   data () {
     const tablePagination = {
-      rowsPerPage: 10,
+      rowsPerPage: 20,
       rowsPerPageOptions: [ 5, 10, 15, 20 ]
     }
     const filterOptions = {

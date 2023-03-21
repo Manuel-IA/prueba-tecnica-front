@@ -16,6 +16,7 @@
               size="12px"
               icon="delete"
               color="negative"
+              class="q-mb-md"
               @click="confirmReset"
             />
           </div>
@@ -76,7 +77,7 @@
 
             <!-- Send button -->
             <q-btn
-              label="Save"
+              label="Finish"
               icon="send"
               color="primary"
               @click="sendCart"
