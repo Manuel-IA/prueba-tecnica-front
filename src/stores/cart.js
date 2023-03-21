@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { LocalStorage } from 'quasar';
+import { api } from 'boot/axios';
 
 export const useCartStore = defineStore( 'cart', () => {
   /**************** STATE ****************/
@@ -90,6 +91,18 @@ export const useCartStore = defineStore( 'cart', () => {
     setCartToLocalStorage()
   }
 
+  // Send data to api
+  function sendDataToApi () {
+    const dataToSend = {
+      total: currentCart.value.total,
+      products: JSON.stringify( currentCart.value.products )
+    }
+
+    api.post( '/carts', dataToSend ).catch( ( error ) => {
+      console.error( error )
+    } )
+  }
+
   /**************** ACTIONS ****************/
 
   return( {
@@ -101,5 +114,6 @@ export const useCartStore = defineStore( 'cart', () => {
     decreaseProductQuantity,
     loadFromLocalStorage,
     resetCurrentCart,
+    sendDataToApi
   } )
 } )

@@ -125,6 +125,9 @@ export default {
       } )
     },
     sendCart () {
+      // Make request
+      cartStore.sendDataToApi()
+
       Notify.create( {
         message: 'Data was send successfully!',
         color: 'positive',
