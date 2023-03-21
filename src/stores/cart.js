@@ -29,8 +29,13 @@ export const useCartStore = defineStore( 'cart', () => {
     return( total )
   }
 
-  function setTotals() {
+  function setTotals () {
     currentCart.value.total = getTotal()
+  }
+
+  function getIndexByIdAndApi (id, isFakeStoreApi) {
+    const products = currentCart.value.products
+    return products.findIndex( (product) => (product.id === id) && (product.is_fake_store_api === isFakeStoreApi))
   }
 
   /**************** HELPERS ****************/
@@ -45,8 +50,13 @@ export const useCartStore = defineStore( 'cart', () => {
 
   /**************** ACTIONS ****************/
 
-  function addProduct ( product ) {
-    currentCart.value.products.push(product)
+  function addProduct ( productInfo ) {
+    const index = getIndexByIdAndApi( productInfo.id, productInfo.is_fake_store_api )
+    if ( index === -1 ){
+      currentCart.value.products.push(productInfo)
+    } else {
+      currentCart.value.products[index].quantity = ( currentCart.value.products[index].quantity + productInfo.quantity )
+    }
 
     setCartToLocalStorage()
     setTotals()
@@ -103,11 +113,21 @@ export const useCartStore = defineStore( 'cart', () => {
     } )
   }
 
+  function getCurrentStock (id, isFakeStoreApi = undefined) {
+    const index = getIndexByIdAndApi(id, isFakeStoreApi)
+    if ( index !== -1 ) {
+      const product = currentCart.value.products[index]
+      return product.stock - product.quantity
+    }
+    return -1
+  }
+
   /**************** ACTIONS ****************/
 
   return( {
     getCurrentCart,
     getTotal,
+    getCurrentStock,
     addProduct,
     removeProduct,
     increaseProductQuantity,

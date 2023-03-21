@@ -114,6 +114,9 @@
 import { Loading } from 'quasar'
 import { defineComponent } from 'vue'
 import ShowProduct from 'src/components/products/ShowProduct.vue'
+import { useCartStore } from 'src/stores/cart.js'
+
+const cartStore = useCartStore()
 
 export default {
   components: {
@@ -280,7 +283,11 @@ export default {
       return( newArr )
     },
     onShow ( productInfo ) {
-      this.productToShow = productInfo
+      this.productToShow = {...productInfo}
+      const currentStock = cartStore.getCurrentStock(productInfo.id, productInfo.is_fake_store_api )
+      if ( currentStock !== -1 ) {
+        this.productToShow.stock = currentStock
+      }
       this.showInfo = true
     }
   }

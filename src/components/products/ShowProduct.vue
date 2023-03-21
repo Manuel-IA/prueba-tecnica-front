@@ -132,7 +132,7 @@ export default {
       this.counter--
     },
     onAddProductToCart () {
-      const productToSave = this.product
+      const productToSave = {...this.product}
       productToSave.quantity = this.counter
 
       // Add product to store
