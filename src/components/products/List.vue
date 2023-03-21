@@ -219,10 +219,6 @@ export default {
 
       let newArr = [].concat(rows) // Copy original array
 
-      // console.log( wordToSearch )
-      // console.log( min )
-      // console.log( max )
-
       // Range Filter
       if ( min && max ) {
         newArr = rows.filter( ( element ) => (element.price >= min) && (element.price <= max) )
@@ -246,7 +242,7 @@ export default {
       // Reset button
       if ( this.filterOptions.majorToMinor ) {
         newArr = newArr.sort( ( product1, product2 ) => {
-          return product2.price - product1.price // Mayor a menor
+          return product2.price - product1.price
         } )
       }
 
