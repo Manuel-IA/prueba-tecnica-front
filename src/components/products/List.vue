@@ -220,7 +220,7 @@ export default {
       let newArr = [].concat(rows) // Copy original array
 
       // Range Filter
-      if ( min && max ) {
+      if ( !isNaN(min) && !isNaN(max) ) {
         newArr = rows.filter( ( element ) => (element.price >= min) && (element.price <= max) )
       }
 
